@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Maniquí & Repisa — Exhibidor</title>
+<style>
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --btn-pink: linear-gradient(135deg, #ff7eb9, #ff758c);
+  --btn-blue: linear-gradient(135deg, #6ee7b7, #3b82f6);
+  --btn-red: linear-gradient(135deg, #f87171, #ef4444);
+  --max-width: 1100px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 32px; color: #111; }
+.wrap { max-width: var(--max-width); margin: auto; display: grid; grid-template-columns: 1fr 380px; gap: 24px; }
+.card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 6px 18px rgba(16,24,40,0.06); transition: transform 0.2s; }
+.card:hover { transform: translateY(-2px); }
+.maniqui-stage { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.maniqui { position: relative; width: 100%; max-width: 420px; aspect-ratio: 7/10; background: linear-gradient(180deg, #fff 0%, #fafafa 100%); border-radius: 18px; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
+.torso { width: 60%; }
+.shirt-img, .hat-img { position: absolute; left: 50%; transform: translateX(-50%); pointer-events: none; }
+.shirt-img { top: 220px; width: 240px; }
+.hat-img { top: 70px; width: 180px; }
+
+/* Repisa */
+.shelf { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.item { display: flex; flex-direction: column; align-items: center; background: linear-gradient(180deg,#fff,#fbfdff); border-radius:10px; padding:8px; cursor:pointer; transition: transform 0.12s, box-shadow 0.12s; position: relative; }
+.item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(16,24,40,0.08); }
+.item img { width: 100%; height: 120px; object-fit: contain; border-radius: 6px; }
+.item .meta { font-size:13px; color: var(--muted); margin-top:8px; }
+.item button { padding:4px 8px; border-radius:8px; font-size:12px; color:#fff; border:none; cursor:pointer; background:var(--btn-red); margin-top:6px; transition: transform 0.2s, box-shadow 0.2s, background 0.3s; }
+.item button:hover { transform: translateY(-2px) scale(1.05); background: linear-gradient(135deg,#f87171,#dc2626); }
+
+/* Botones */
+.controls { display:flex; gap:8px; flex-wrap:wrap; }
+.btn { padding:10px 16px; border-radius:12px; color:#fff; font-weight:bold; cursor:pointer; border:none; transition: transform 0.2s, box-shadow 0.2s, background 0.3s; position:relative; overflow:hidden; }
+.btn.pink { background: var(--btn-pink); box-shadow: 0 4px 12px rgba(255,118,140,0.4);}
+.btn.pink:hover { background: linear-gradient(135deg,#ff95c5,#ff6099); transform: translateY(-3px) scale(1.05);}
+.btn.blue { background: var(--btn-blue); box-shadow:0 4px 12px rgba(59,130,246,0.4);}
+.btn.blue:hover { background: linear-gradient(135deg,#3bce9e,#2563eb); transform: translateY(-3px) scale(1.04); }
+
+label.file { padding:8px 10px; border-radius:8px; background:#f3f4f6; cursor:pointer; font-size:14px; }
+input[type=file] { display:none; }
+.hint { font-size:13px; color: var(--muted); }
+
+@media (max-width:980px) { .wrap { grid-template-columns:1fr; padding:16px; } .maniqui { max-width:320px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- Maniquí -->
+  <div class="card maniqui-stage">
+    <h2>Maniquí digital</h2>
+    <div class="maniqui" id="maniqui">
+      <svg class="torso" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f7fafc"/><stop offset="1" stop-color="#eef2f7"/></linearGradient></defs>
+        <g transform="translate(0,10)">
+          <path d="M40 40 C30 40 18 52 22 80 C26 110 34 120 40 140 C52 180 78 200 100 200 C122 200 148 180 160 140 C166 120 174 110 178 80 C182 52 170 40 160 40 C140 40 120 56 100 56 C80 56 60 40 40 40Z" fill="url(#g1)" stroke="#e6e9ef"/>
+          <rect x="90" y="16" width="20" height="18" rx="6" fill="#f8fafc" stroke="#e6e9ef"/>
+        </g>
+      </svg>
+      <img id="shirt" class="shirt-img" src="https://via.placeholder.com/240x160?text=Camiseta" alt="Camiseta">
+      <img id="hat" class="hat-img" src="https://via.placeholder.com/180x100?text=Gorra" alt="Gorra">
+    </div>
+
+    <div style="display:flex; justify-content:space-between; gap:8px; width:100%; margin-top:12px;">
+      <div>
+        <label class="file" for="uploadShirt">Subir camiseta</label>
+        <input id="uploadShirt" type="file" accept="image/*">
+        <label class="file" for="uploadHat">Subir gorra</label>
+        <input id="uploadHat" type="file" accept="image/*">
+      </div>
+      <div class="controls">
+        <button class="btn blue" id="resetBtn">Restablecer</button>
+      </div>
+    </div>
+    <p class="hint">Clic en un artículo para aplicarlo o sube tus propias imágenes.</p>
+  </div>
+
+  <!-- Repisa -->
+  <aside class="card">
+    <h3>Repisa</h3>
+    <div class="shelf" id="shelf"></div>
+  </aside>
+</div>
+
+<script>
+const shirtEl = document.getElementById('shirt');
+const hatEl = document.getElementById('hat');
+const shelf = document.getElementById('shelf');
+
+// Array de imágenes guardadas
+let savedImages = [];
+
+// Función para renderizar repisa
+function renderShelf() {
+  shelf.innerHTML = '';
+  savedImages.forEach(img=>{
+    const div = document.createElement('div');
+    div.className='item';
+    div.dataset.type=img.type;
+    div.dataset.src=img.src;
+    div.innerHTML = `<img src="${img.src}" alt="${img.name}"><div class="meta">${img.name}</div><button>Eliminar</button>`;
+    shelf.appendChild(div);
+
+    div.querySelector('button').addEventListener('click',()=>{
+      const password = prompt("Ingresa la clave para eliminar esta imagen:");
+      if(password==="admin123"){
+        savedImages = savedImages.filter(i=>i.src!==img.src);
+        localStorage.setItem('savedImages', JSON.stringify(savedImages));
+        renderShelf();
+        alert("Imagen eliminada.");
+      } else { alert("Clave incorrecta!"); }
+    });
+  });
+}
+
+// Cargar imágenes de localStorage
+savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
+renderShelf();
+
+// Restaurar maniquí
+const lastShirt = localStorage.getItem('currentShirt');
+const lastHat = localStorage.getItem('currentHat');
+if(lastShirt) shirtEl.src = lastShirt;
+if(lastHat) hatEl.src = lastHat;
+
+// Aplicar imagen desde repisa
+shelf.addEventListener('click', e=>{
+  const item = e.target.closest('.item');
+  if(!item || e.target.tagName==="BUTTON") return;
+  const {type, src}=item.dataset;
+  if(type==='shirt'){ shirtEl.src=src; localStorage.setItem('currentShirt', src); }
+  if(type==='hat'){ hatEl.src=src; localStorage.setItem('currentHat', src); }
+});
+
+// Subir imágenes
+function uploadImage(inputId,targetEl,type){
+  document.getElementById(inputId).addEventListener('change', e=>{
+    const file = e.target.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = evt=>{
+        const base64 = evt.target.result;
+        targetEl.src = base64;
+        if(type==='shirt') localStorage.setItem('currentShirt', base64);
+        if(type==='hat') localStorage.setItem('currentHat', base64);
+        savedImages.push({type, src: base64, name:`Personalizada ${type}`});
+        localStorage.setItem('savedImages', JSON.stringify(savedImages));
+        renderShelf();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+uploadImage('uploadShirt',shirtEl,'shirt');
+uploadImage('uploadHat',hatEl,'hat');
+
+// Restablecer maniquí con clave
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  const password = prompt("Ingresa la clave para restablecer maniquí:");
+  if(password==="admin123"){
+    shirtEl.src="https://via.placeholder.com/240x160?text=Camiseta";
+    hatEl.src="https://via.placeholder.com/180x100?text=Gorra";
+    localStorage.removeItem('currentShirt');
+    localStorage.removeItem('currentHat');
+    alert("Maniquí restablecido.");
+  } else { alert("Clave incorrecta!"); }
+});
+</script>
+</body>
+</html>

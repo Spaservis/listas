@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página con Clave de Ingreso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      text-align: center;
+      padding: 50px;
+    }
+    .boton-ingreso {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .boton-ingreso:hover {
+      background-color: #0056b3;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Acceso Restringido</h1>
+  <p>Ingrese la clave para entrar:</p>
+  <input type="password" id="clave" placeholder="Escriba la clave aquí">
+  <br>
+  <button class="boton-ingreso" onclick="verificarClave()">Ingresar</button>
+
+  <script>
+    function verificarClave() {
+      const claveCorrecta = "administrador"; // 🔑 Cambia aquí la clave
+      const claveIngresada = document.getElementById("clave").value;
+
+      if (claveIngresada === claveCorrecta) {
+        // Redirige a la página principal
+        window.location.href="menu.html"; 
+      } else {
+        alert("Clave incorrecta. Intente de nuevo.");
+      }
+    }
+  </script>
+
+</body>
+</html>
