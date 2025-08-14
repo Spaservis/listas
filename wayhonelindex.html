@@ -130,7 +130,7 @@
     <label>Turno Disponible:
       <select id="turno" required></select>
     </label>
-    <button type="submit">Apartar Mesa</button>
+    <button type="submit">Seleccionar turno</button>
     <button type="button" onclick="limpiarCampos()">Limpiar</button>
   </form>
 
@@ -154,7 +154,7 @@ Factura Digital:<a href="https://spaservis.github.io/RIPS/" target="_blank">Ir <
   <script>
     // TURNOS
     const horarios = ["Turno 1", "Turno 2", "Turno 3", "Turno 4", "Turno 5", "Turno 6", "Turno 7", "Turno 8", "Turno 9", "Turno 10", "Turno 11", "Turno 12", "Turno 13", "Turno 14"];
-    const CONTRASENA_ADMIN = "Santiago123";
+    const CONTRASENA_ADMIN = "wayhone123";
     let turnosTomados = JSON.parse(localStorage.getItem("turnos")) || [];
 
     function actualizarTurnos() {
@@ -318,3 +318,4 @@ Total: $${total.toLocaleString()} COP`;
 </body>
 
 </html>
+
